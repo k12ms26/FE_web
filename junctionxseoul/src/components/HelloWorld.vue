@@ -58,17 +58,21 @@
         msg.rate = 0.95;
         window.speechSynthesis.speak(msg);
         div.id = id;
-          if (div.id === '5') {
-            $('#micImg').attr('style', 'display: none;');
-            $('#micExp').attr('style', 'display: none;');
+        if (div.id === '5') {
 
-          }
+          $('#micImg').attr('style', 'display: none;');
+          $('#micExp').attr('style', 'display: none;');
+
+        }
         recognition.start();
         recognition.onspeechstart = function () {
           // makeNewQuestion();
-          p = document.createElement('p');
-          document.querySelector('.words').appendChild(p);
-          p.id = id;
+          if (id <= 4) {
+            p = document.createElement('p');
+            document.querySelector('.words').appendChild(p);
+            p.id = id;
+          }
+
 
           // makeNewTextContent(); // 음성 인식 시작시마다 새로운 문단을 추가한다.
 
@@ -83,6 +87,7 @@
 
         };
 
+      // 이부분은 api받기를 위한 것
         let later = function () {
           var tmp = ref.questionIndex - 1
           console.log($('#' + tmp).html());
