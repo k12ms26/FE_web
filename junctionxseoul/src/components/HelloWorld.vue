@@ -25,7 +25,7 @@
   export default {
     data() {
       return {
-        questions: ['회원가입 한 자녀가 있나요? 있으시다면 자녀의 전화번호를, 없으시다면 아니오 라고 말씀해주십시오.',
+        questions: ['회원가입한 자녀가 있나요? 있으시다면 자녀의 전화번호를, 없으시다면 아니오 라고 말씀해주십시오.',
           '몇 월 몇 일에 차량을 이용하시겠어요?',
           '{날짜} 에는 {장소} 여행이 가능합니다. 가능한 시간대는 { 시간대 } 입니다.',
           '동행인이 있나요? 있다면 인원 수를, 없다면 아니오 라고 말씀해주십시오.',
@@ -38,10 +38,6 @@
         id: 0,
       }
     },
-    created() {
-      // this.$axios.get('http://18.217.211.176:3000/course')
-      //             .then((response) => (console.log(response.data)));
-    },
     methods: {
       clickthis: function () {
         var ref = this;
@@ -52,25 +48,28 @@
         recognition.lang = 'ko-KR';
 
         let div = null;
+        let p = null;
+        let id = this.id++;
         div = document.createElement('div');
         document.querySelector('.words').appendChild(div);
         div.textContent = this.questions[this.questionIndex++];
-
-        let p = null;
-        let id = this.id++;
-        recognition.start();
-        recognition.onstart = function () {
-          // makeNewQuestion();
-          p = document.createElement('p');
-          document.querySelector('.words').appendChild(p);
-          p.id = id;
-          if (p.id === '5') {
-            console.log($('#0').html());
-            $('#5').attr('style', 'display: none;');
+        var msg = new SpeechSynthesisUtterance(div.textContent);
+        msg.pitch = 0.95;
+        msg.rate = 0.95;
+        window.speechSynthesis.speak(msg);
+        div.id = id;
+          if (div.id === '5') {
             $('#micImg').attr('style', 'display: none;');
             $('#micExp').attr('style', 'display: none;');
 
           }
+        recognition.start();
+        recognition.onspeechstart = function () {
+          // makeNewQuestion();
+          p = document.createElement('p');
+          document.querySelector('.words').appendChild(p);
+          p.id = id;
+
           // makeNewTextContent(); // 음성 인식 시작시마다 새로운 문단을 추가한다.
 
         };
@@ -79,20 +78,17 @@
         // };
 
         recognition.onresult = function (e) {
-          console.log(e.results[0][0].transcript);
           p.textContent = e.results[0][0].transcript;
           later();
 
         };
 
-        let later = function() {
-          var tmp = ref.questionIndex-1
-          console.log('#'+tmp);
-          console.log($('#'+tmp).html());
+        let later = function () {
+          var tmp = ref.questionIndex - 1
+          console.log($('#' + tmp).html());
         }
+      }
 
-
-      },
     },
 
   };
@@ -135,6 +131,8 @@
     font-weight: 800;
     margin-bottom: 20%;
     text-align: right;
+    animation: ibot_comeUp 1.5s ease-in-out 1 alternate;
+    -webkit-animation: ibot_comeUp 1.5s ease-in-out 1 alternate;
   }
 
   .words p:after {
@@ -151,6 +149,7 @@
     font-weight: 800;
     margin-bottom: 10%;
     text-align: left;
+    /* border: none; */
   }
 
   p {
