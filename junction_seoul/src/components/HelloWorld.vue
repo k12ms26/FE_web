@@ -13,6 +13,7 @@
 
 <script>
   import $ from 'jquery';
+  import axios from 'axios';
   //     1. 회원가입 한 자녀가 있나요? 있으시다면 자녀의 전화번호를, 없으시다면 아니오라고 말씀해주십시오.
   //     2. 몇 월 몇 일에 차량을 이용하시겠어요?
   //     3. {날짜} 에는 {장소} 여행이 가능합니다. 가능한 시간대는 { 시간대 } 입니다.
@@ -23,6 +24,7 @@
   //     맞으시다면 네, 아니라면 아니오 라고 말씀해주십시오.
   //     6. 예약이 완료되었습니다. 이용해주셔서 감사합니다.
   export default {
+
     data() {
       return {
         questions: ['회원가입한 자녀가 있나요? 있으시다면 자녀의 전화번호를, 없으시다면 아니오 라고 말씀해주십시오.',
@@ -38,7 +40,7 @@
       }
     },
     created() {
-      this.$axios.get('https://18.217.211.176:3000/course')
+      this.$axios.get('http://18.217.211.176:3000/course')
         .then((response) => console.log(response.data));
     },
     methods: {
@@ -100,7 +102,7 @@
               console.log($('#0' + tmp).html())
               var data = $('#0' + tmp).html();
 
-              ref.$axios.post('/reservation/date', {
+              axios.post('http://18.217.211.176:3000/reservation/date', {
                   text: data,
                 })
                 .then(res => {
@@ -115,7 +117,7 @@
             if ($('#0' + tmp).html().charAt($('#0' + tmp).html().length - 1) === time) {
 
               data = $('#0' + tmp).html().slice(0, $('#0' + tmp).html().length - 1);
-              ref.$axios.post('/reservation/time', {
+              axios.post('http://18.217.211.176:3000/reservation/time', {
                   text: data,
                 })
                 .then(res => {
@@ -126,12 +128,14 @@
                 });
             }
           } else if ('#0' + tmp === '#03') {
-            var people = '명';
+            // var people = '명';
             console.log($('#0' + tmp).html())
-            if ($('#0' + tmp).html().charAt($('#0' + tmp).html().length - 1) === people) {
+            // if ($('#0' + tmp).html().charAt($('#0' + tmp).html().length - 1) === people) {
+              if($('#0'+tmp).html()) {
 
-              data = $('#0' + tmp).html().slice(0, $('#0' + tmp).html().length - 1);
-              ref.$axios.post('/reservation/companion', {
+              // data = $('#0' + tmp).html().slice(0, $('#0' + tmp).html().length - 1);
+              data = $('#0' + tmp).html();
+              ref.$axios.post('http://18.217.211.176:3000/reservation/companion', {
                   text: data,
                 })
                 .then(res => {
@@ -143,9 +147,6 @@
             } else {
               ref.$axios.post('http://18.217.211.176:3000/reservation/companion', {
                   text: 1,
-                  header: {
-                    "Access-Control-Allow-Origin" : "*"
-                  }
                 })
                 .then(res => {
                   console.log(res.data)
