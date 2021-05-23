@@ -8,6 +8,6 @@ module.exports = {
   }
   },
   publicPath: '/DSookKai/FE_web',
-  outputDir: './dist',
+  outputDir: './docs',
   runtimeCompiler: true,
 };
